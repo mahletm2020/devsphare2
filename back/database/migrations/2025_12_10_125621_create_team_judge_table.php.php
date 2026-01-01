@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('team_judge', function (Blueprint $table) {
-            $table->foreignId('team_id')->constrained('teams')->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->timestamps();
-
-            $table->primary(['team_id', 'user_id']);
-        });
+    Schema::create('team_judges', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('team_id')->constrained()->onDelete('cascade');
+        $table->foreignId('judge_id')->references('id')->on('users')->onDelete('cascade');
+        $table->timestamps();
+        
+        $table->unique(['team_id', 'judge_id']);
+    });
     }
 
     /**

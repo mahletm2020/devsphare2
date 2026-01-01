@@ -8,10 +8,12 @@
     "require": {
         "php": "^8.2",
         "doctrine/dbal": "^4.4",
+        "get-stream/stream-chat": "^3.14",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.2",
         "laravel/tinker": "^2.10.1",
         "league/flysystem-aws-s3-v3": "^3.0",
+        "resend/resend-php": "^2.0",
         "spatie/laravel-permission": "^6.23"
     },
     "require-dev": {

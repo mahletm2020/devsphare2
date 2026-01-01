@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('team_mentor', function (Blueprint $table) {
-            $table->foreignId('team_id')->constrained('teams')->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+        Schema::create('team_mentors', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('team_id')->constrained()->onDelete('cascade');
+            $table->foreignId('mentor_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
-
-            $table->primary(['team_id', 'user_id']);
+            
+            $table->unique(['team_id', 'mentor_id']);
         });
     }
 

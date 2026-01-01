@@ -115,4 +115,31 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Email Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Control email sending and enable/disable specific email types.
+    | Critical emails (verification, password reset, system failures) are
+    | always enabled regardless of these settings.
+    |
+    */
+
+    'enabled' => env('MAIL_ENABLED', true),
+
+    'enabled_types' => [
+        'email_verification' => env('MAIL_ENABLED_VERIFICATION', true),
+        'password_reset' => env('MAIL_ENABLED_PASSWORD_RESET', true),
+        'team_created' => env('MAIL_ENABLED_TEAM_CREATED', false),
+        'submission_submitted' => env('MAIL_ENABLED_SUBMISSION_SUBMITTED', false),
+        'hackathon_published' => env('MAIL_ENABLED_HACKATHON_PUBLISHED', false),
+        'judge_assigned' => env('MAIL_ENABLED_JUDGE_ASSIGNED', false),
+        'judging_period_started' => env('MAIL_ENABLED_JUDGING_PERIOD_STARTED', false),
+        'judging_deadline_reminder' => env('MAIL_ENABLED_JUDGING_DEADLINE_REMINDER', false),
+        'results_published' => env('MAIL_ENABLED_RESULTS_PUBLISHED', false),
+        'certificate_available' => env('MAIL_ENABLED_CERTIFICATE_AVAILABLE', false),
+        'system_failure_critical' => env('MAIL_ENABLED_SYSTEM_FAILURE', true),
+    ],
+
 ];

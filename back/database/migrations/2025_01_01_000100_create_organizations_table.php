@@ -10,12 +10,13 @@ return new class extends Migration
     {
         Schema::create('organizations', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('owner_id')->constrained('users')->onDelete('cascade');
             $table->string('name');
             $table->string('slug')->unique();
-            $table->foreignId('owner_id')->constrained('users')->cascadeOnDelete();
+            $table->text('description')->nullable();
+            $table->string('website')->nullable();
+            $table->string('logo')->nullable();
             $table->timestamps();
-
-            $table->index('owner_id');
         });
     }
 
@@ -24,6 +25,27 @@ return new class extends Migration
         Schema::dropIfExists('organizations');
     }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

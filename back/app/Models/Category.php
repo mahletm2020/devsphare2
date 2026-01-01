@@ -13,6 +13,8 @@ class Category extends Model
         'hackathon_id',
         'name',
         'description',
+        'max_teams',
+        'order',
     ];
 
     public function hackathon()
@@ -25,6 +27,27 @@ class Category extends Model
         return $this->hasMany(Team::class);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

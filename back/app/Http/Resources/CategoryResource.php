@@ -14,9 +14,29 @@ class CategoryResource extends JsonResource
             'hackathon_id' => $this->hackathon_id,
             'name' => $this->name,
             'description' => $this->description,
+            'max_teams' => $this->max_teams,
+            'team_count' => $this->when(isset($this->teams_count), $this->teams_count),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

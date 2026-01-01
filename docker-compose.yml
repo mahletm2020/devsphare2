@@ -1,0 +1,97 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  db:
+    image: mysql:8.0
+    container_name: devsphere_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-devsphere}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-root}
+      MYSQL_USER: ${DB_USERNAME:-devsphere}
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - devsphere_network
+
+  # Laravel Backend
+  backend:
+    image: php:8.2-cli
+    container_name: devsphere_backend
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./back:/var/www/html
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE:-devsphere}
+      - DB_USERNAME=${DB_USERNAME:-devsphere}
+      - DB_PASSWORD=${DB_PASSWORD:-root}
+      - APP_ENV=local
+      - APP_DEBUG=true
+    depends_on:
+      - db
+    networks:
+      - devsphere_network
+    command: >
+      sh -c "apt-get update -qq && 
+             apt-get install -y -qq curl unzip git libpng-dev libonig-dev libxml2-dev zip > /dev/null 2>&1 &&
+             docker-php-ext-install -j$(nproc) pdo_mysql mbstring exif pcntl bcmath gd > /dev/null 2>&1 &&
+             curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer &&
+             composer install --no-interaction --prefer-dist --optimize-autoloader &&
+             php artisan config:clear &&
+             php artisan cache:clear &&
+             php artisan migrate --force &&
+             php artisan serve --host=0.0.0.0 --port=8000"
+
+  # Nginx for Laravel
+  nginx:
+    image: nginx:alpine
+    container_name: devsphere_nginx
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./back:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - backend
+    networks:
+      - devsphere_network
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: devsphere_frontend
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8000/api/v1
+    depends_on:
+      - backend
+    networks:
+      - devsphere_network
+    command: npm run dev -- --host
+
+volumes:
+  db_data:
+    driver: local
+
+networks:
+  devsphere_network:
+    driver: bridge
+

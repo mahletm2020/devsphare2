@@ -19,7 +19,7 @@ return [
     ],
 
     'resend' => [
-        'key' => env('RESEND_API_KEY'),
+        'api_key' => env('RESEND_API_KEY'),
     ],
 
     'ses' => [
@@ -33,6 +33,18 @@ return [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
+    ],
+
+    'chapa' => [
+        'secret_key' => env('CHAPA_SECRET_KEY'),
+        'public_key' => env('CHAPA_PUBLIC_KEY'),
+        'base_url' => env('CHAPA_BASE_URL', 'https://api.chapa.co/v1'),
+    ],
+
+    'stream' => [
+        'api_key' => env('STREAM_API_KEY'),
+        'api_secret' => env('STREAM_API_SECRET'),
+        'app_id' => env('STREAM_APP_ID'),
     ],
 
 ];

@@ -10,12 +10,15 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('hackathon_id')->constrained('hackathons')->cascadeOnDelete();
+            $table->foreignId('hackathon_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->text('description')->nullable();
+            $table->integer('max_teams')->nullable();
+            $table->integer('order')->default(0);
             $table->timestamps();
-
-            $table->index('hackathon_id');
+            
+            // Unique constraint: name per hackathon
+            $table->unique(['hackathon_id', 'name']);
         });
     }
 
@@ -24,3 +27,24 @@ return new class extends Migration
         Schema::dropIfExists('categories');
     }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
